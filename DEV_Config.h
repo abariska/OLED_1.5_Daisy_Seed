@@ -1,10 +1,4 @@
-/******************************************************************************
-**************************Hardware interface layer*****************************
-* | file      	:	DEV_Config.h
-* |	version		  :	V1.0
-* | date		    :	2020-06-16
-* | function	  :	Provide the hardware underlying interface	
-******************************************************************************/
+
 #ifndef _DEV_CONFIG_H_
 #define _DEV_CONFIG_H_
 
