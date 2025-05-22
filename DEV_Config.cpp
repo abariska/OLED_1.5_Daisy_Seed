@@ -23,7 +23,7 @@ void SPI_Config()
     spi_config.clock_polarity = SpiHandle::Config::ClockPolarity::LOW;
     spi_config.clock_phase    = SpiHandle::Config::ClockPhase::ONE_EDGE;
     spi_config.nss            = SpiHandle::Config::NSS::HARD_OUTPUT;
-    spi_config.baud_prescaler = SpiHandle::Config::BaudPrescaler::PS_8;
+    spi_config.baud_prescaler = SpiHandle::Config::BaudPrescaler::PS_4;
     // SPI pin config
     spi_config.pin_config.sclk = Pin(PORTG, 11);
     spi_config.pin_config.miso = Pin(PORTB, 4);
