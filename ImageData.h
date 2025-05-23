@@ -32,7 +32,10 @@
 #ifndef _IMAGEDATA_H_
 #define _IMAGEDATA_H_
 
-extern const unsigned char gImage_1in5[];	//rotate 90, Color reversal
+extern const unsigned char tri_wave[];
+extern const unsigned char sqr_wave[];
+extern const unsigned char saw_wave[];
+extern const unsigned char synth_name_image[];	
 
 
 #endif
