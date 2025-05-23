@@ -526,7 +526,7 @@ void Paint_DrawString_EN(UWORD Xstart, UWORD Ystart, const char * pString,
             Xpoint = Xstart;
             Ypoint = Ystart;
         }
-        Paint_DrawChar(Xpoint, Ypoint, * pString, Font, Color_Background, Color_Foreground);
+        Paint_DrawChar(Xpoint, Ypoint, * pString, Font, Color_Foreground, Color_Background);
 
         //The next character of the address
         pString ++;
@@ -594,7 +594,7 @@ void Paint_DrawNum(UWORD Xpoint, UWORD Ypoint,const char * Number,
         }
   
     //show
-    Paint_DrawString_EN(Xpoint, Ypoint, (const char*)pStr, Font, Color_Background, Color_Foreground);
+    Paint_DrawString_EN(Xpoint, Ypoint, (const char*)pStr, Font, Color_Foreground, Color_Background);
 }
 
 /******************************************************************************
@@ -734,3 +734,40 @@ void Paint_DrawBitMap_Block(const unsigned char* image_buffer, UBYTE Region)
         }
     }
 }
+
+void Paint_TextCentered(const char* text, uint8_t x1, uint8_t x2, uint8_t y, sFONT font, uint16_t text_color, uint16_t background_color) {
+    
+    char param_str[10];
+    sprintf(param_str, "%s", text);
+    uint8_t text_len = 0;
+    for (const char* c = param_str; *c != '\0'; c++) {
+        text_len++;
+    }
+    uint8_t text_width = text_len * font.Width;
+    uint8_t display_width = x2 - x1;
+    uint8_t startX = x1 + (display_width - text_width) / 2;
+    if (startX < x1) startX = x1;
+    if (startX + text_width > x2) startX = x2 - text_width;
+    
+    Paint_DrawString_EN(startX, y, param_str, &font, text_color, background_color);
+}
+
+void Paint_NumCentered(int param, uint8_t x1, uint8_t x2, uint8_t y, uint8_t Digit, sFONT font, uint16_t text_color, uint16_t background_color){
+    
+    char param_str[8];
+    sprintf(param_str, "%d", param);
+    uint8_t num_len = 0;
+
+    for (const char* c = param_str; *c != '\0'; c++) {
+        num_len++;
+    }
+    uint8_t num_width = num_len * font.Width;
+    uint8_t display_width = x2 - x1;
+    uint8_t startX = x1 + (display_width - num_width) / 2;
+    if (startX < x1) startX = x1;
+    if (startX + num_width > x2) startX = x2 - num_width;
+    
+    Paint_DrawNum(startX, y, param_str, &font, Digit, text_color, background_color);
+}
+
+
