@@ -32,6 +32,9 @@
 #ifndef _IMAGEDATA_H_
 #define _IMAGEDATA_H_
 
+extern const unsigned char tri_wave[];
+extern const unsigned char sqr_wave[];
+extern const unsigned char saw_wave[];
 extern const unsigned char synth_name_image[];	
 
 
