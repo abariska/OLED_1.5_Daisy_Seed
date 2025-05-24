@@ -151,7 +151,7 @@ void Paint_DrawBitMap(const unsigned char* image_buffer);
 //void Paint_DrawBitMap_Half(const unsigned char* image_buffer, UBYTE Region);
 //void Paint_DrawBitMap_OneQuarter(const unsigned char* image_buffer, UBYTE Region);
 //void Paint_DrawBitMap_OneEighth(const unsigned char* image_buffer, UBYTE Region);
-void Paint_DrawBitMap_Block(const unsigned char* image_buffer, UBYTE Region);
+void Paint_DrawBitMapBlock(const unsigned char* image_buffer, UBYTE image_width, UBYTE image_height, UBYTE xStart = 0, UBYTE yStart = 0);
 void Paint_TextCentered(const char* text, uint8_t x1, uint8_t x2, uint8_t y, sFONT font, uint16_t text_color, uint16_t background_color);
 void Paint_NumCentered(int param, uint8_t x1, uint8_t x2, uint8_t y, uint8_t Digit, sFONT font, uint16_t text_color, uint16_t background_color);
 #endif
