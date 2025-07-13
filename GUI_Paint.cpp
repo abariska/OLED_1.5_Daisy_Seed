@@ -638,102 +638,56 @@ void Paint_DrawBitMap(const unsigned char* image_buffer)
     UWORD x, y;
     UDOUBLE Addr = 0;
 
-    for (y = 0; y < Paint.HeightByte; y++) {
-        for (x = 0; x < Paint.WidthByte; x++) {//8 pixel =  1 byte
-            Addr = x + y * Paint.WidthByte;
+    for (y = 0; y < Paint.Height; y++) {
+        for (x = 0; x < Paint.Width; x++) {//8 pixel =  1 byte
+            Addr = x + y * Paint.Width;
             Paint.Image[Addr] = (unsigned char)image_buffer[Addr];
         }
     }
 }
 
-///******************************************************************************
-//function: SDisplay half of monochrome bitmap
-//parameter:
-//  Region : 1 Upper half
-//           2 Lower half
-//info:
-//******************************************************************************/
-//void Paint_DrawBitMap_Half(const unsigned char* image_buffer, UBYTE Region)
-//{
-//    UWORD x, y;
-//    UDOUBLE Addr = 0;
-//    
-//    if(Region == 1){
-//      for (y = 0; y < Paint.HeightByte; y++) {
-//          for (x = 0; x < Paint.WidthByte; x++) {//8 pixel =  1 byte
-//              Addr = x + y * Paint.WidthByte;
-//              Paint.Image[Addr] = (unsigned char)image_buffer[Addr];
-//          }
-//      }
-//    }else{
-//      for (y = 0; y < Paint.HeightByte; y++) {
-//          for (x = 0; x < Paint.WidthByte; x++) {//8 pixel =  1 byte
-//              Addr = x + y * Paint.WidthByte ;
-//              Paint.Image[Addr] = \
-//              (unsigned char)image_buffer[Addr+ (Paint.HeightByte)*Paint.WidthByte];
-//          }
-//      }
-//    }
-//}
-
-///******************************************************************************
-//function: SDisplay half of monochrome bitmap
-//parameter:
-//  Region : 1 Upper half
-//           2 Lower half
-//info:
-//******************************************************************************/
-//void Paint_DrawBitMap_OneQuarter(const unsigned char* image_buffer, UBYTE Region)
-//{
-//    UWORD x, y;
-//    UDOUBLE Addr = 0;
-//    
-//    if(Region == 1){
-//      for (y = 0; y < Paint.HeightByte; y++) {
-//          for (x = 0; x < Paint.WidthByte; x++) {//8 pixel =  1 byte
-//              Addr = x + y * Paint.WidthByte;
-//              Paint.Image[Addr] = (unsigned char)image_buffer[Addr];
-//          }
-//      }
-//    }else if(Region == 2){
-//      for (y = 0; y < Paint.HeightByte; y++) {
-//          for (x = 0; x < Paint.WidthByte; x++) {//8 pixel =  1 byte
-//              Addr = x + y * Paint.WidthByte ;
-//              Paint.Image[Addr] = \
-//              (unsigned char)image_buffer[Addr+ (Paint.HeightByte)*Paint.WidthByte];
-//          }
-//      }
-//    }else if(Region == 3){
-//      for (y = 0; y < Paint.HeightByte; y++) {
-//          for (x = 0; x < Paint.WidthByte; x++) {//8 pixel =  1 byte
-//              Addr = x + y * Paint.WidthByte ;
-//              Paint.Image[Addr] = \
-//              (unsigned char)image_buffer[Addr+ (Paint.HeightByte)*Paint.WidthByte*2];
-//          }
-//      }
-//    }else if(Region == 4){
-//      for (y = 0; y < Paint.HeightByte; y++) {
-//          for (x = 0; x < Paint.WidthByte; x++) {//8 pixel =  1 byte
-//              Addr = x + y * Paint.WidthByte ;
-//              Paint.Image[Addr] = \
-//              (unsigned char)image_buffer[Addr+ (Paint.HeightByte)*Paint.WidthByte*3];
-//          }
-//      }
-//    }
-//}
-
-void Paint_DrawBitMap_Block(const unsigned char* image_buffer, UBYTE Region)
-{
+void Paint_DrawBitMapBlock(const unsigned char* image_buffer, UBYTE image_width, UBYTE image_height, UBYTE xStart, UBYTE yStart){
     UWORD x, y;
-    UDOUBLE Addr = 0;
-    for (y = 0; y < Paint.HeightByte; y++) {
-        for (x = 0; x < Paint.WidthByte; x++) {//8 pixel =  1 byte
-            Addr = x + y * Paint.WidthByte ;
-            Paint.Image[Addr] = \
-            (unsigned char)image_buffer[Addr+ (Paint.HeightByte)*Paint.WidthByte*(Region - 1)];
+    UDOUBLE SrcAddr = 0;
+    UBYTE bit;
+    for (y = 0; y < image_height; y++) {
+        for (x = 0; x < image_width; x++) {
+            // Розрахунок адреси байта та біта в image_buffer
+            SrcAddr = (x / 8) + y * (image_width / 8);
+            bit = 7 - (x % 8); // Біт у байті (від 7 до 0)
+            
+            // Перевірка, чи встановлений біт
+            if (image_buffer[SrcAddr] & (1 << bit)) {
+                Paint_SetPixel(x + xStart, y + yStart, WHITE);
+            } else {
+                Paint_SetPixel(x + xStart, y + yStart, BLACK);
+            }
         }
     }
 }
+// for ( Page = 0; Page < Font->Height; Page ++ ) {
+//     for ( Column = 0; Column < Font->Width; Column ++ ) {
+
+//       //To determine whether the font background color and screen background color is consistent
+//       if (FONT_BACKGROUND == Color_Background) { //this process is to speed up the scan
+//         if (*ptr & (0x80 >> (Column % 8)))
+//           Paint_SetPixel (Xpoint + Column, Ypoint + Page, Color_Foreground );
+//       } else {
+//         if (*ptr & (0x80 >> (Column % 8))) {
+//           Paint_SetPixel (Xpoint + Column, Ypoint + Page, Color_Foreground );
+//         } else {
+//           Paint_SetPixel (Xpoint + Column, Ypoint + Page, Color_Background );
+//         }
+//       }
+//       //One pixel is 8 bits
+//       if (Column % 8 == 7) {
+//         ptr++;
+//       }
+//     }/* Write a line */
+//     if (Font->Width % 8 != 0) {
+//       ptr++;
+//     }
+//   }/* Write all */
 
 void Paint_TextCentered(const char* text, uint8_t x1, uint8_t x2, uint8_t y, sFONT font, uint16_t text_color, uint16_t background_color) {
     
