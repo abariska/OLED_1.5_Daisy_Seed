@@ -41,10 +41,19 @@ function:
 #define OLED_1in5_WIDTH  128//OLED width
 #define OLED_1in5_HEIGHT 128 //OLED height
 
+struct ImageData
+{
+    UBYTE* data;
+    UWORD size;
+};
+
 
 void OLED_1in5_Init(void);
 void OLED_1in5_Clear(void);
 void OLED_1in5_Display(const UBYTE *Image);
 void OLED_1in5_Display_Part(const UBYTE *Image, UBYTE Xstart, UBYTE Ystart, UBYTE Xend, UBYTE Yend);
+void OLED_Dma_Ready(void*, daisy::SpiHandle::Result result);
+void OLED_Transmit_DMA(ImageData* Imagedata);
+void OLED_Part_Transmit_DMA(ImageData *Imagedata, UBYTE Xstart, UBYTE Ystart, UBYTE Xend, UBYTE Yend);
 #endif  
 	 

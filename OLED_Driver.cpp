@@ -30,6 +30,14 @@
 ******************************************************************************/
 #include "OLED_Driver.h"
 #include "stdio.h"
+#include "core_cm7.h"
+
+
+
+static volatile bool dmaReady = true;
+static volatile bool updatePending = false;
+static ImageData* lastImageBuffer = NULL;
+static UBYTE pending_Xstart, pending_Ystart, pending_Xend, pending_Yend;
 
 /*******************************************************************************
 function:
@@ -200,4 +208,39 @@ void OLED_1in5_Display_Part(const UBYTE *Image, UBYTE Xstart, UBYTE Ystart, UBYT
             temp = Image[j + i*(Xend-Xstart)/2];
             OLED_WriteData(temp);
         }
+}
+//--------------------------------------------------------
+// DMA ready callback functions
+//--------------------------------------------------------
+void OLED_Dma_Ready(void*, daisy::SpiHandle::Result result)
+{
+    dmaReady = (result == daisy::SpiHandle::Result::OK);
+}
+
+void OLED_Transmit_DMA(ImageData *Imagedata)
+{
+    if (dmaReady)
+    {
+        pin_dc.Write(true);
+        dmaReady = false;
+        SCB_CleanDCache_by_Addr((uint32_t*)Imagedata->data, Imagedata->size);
+        spi_display.DmaTransmit((UBYTE*)Imagedata->data, Imagedata->size, NULL, OLED_Dma_Ready, NULL);
+    }
+}
+
+void OLED_Part_Transmit_DMA(ImageData *Imagedata, UBYTE Xstart, UBYTE Ystart, UBYTE Xend, UBYTE Yend)
+{
+    while (!dmaReady) {
+        System::Delay(1); 
+    }
+    
+    dmaReady = false;
+    
+    OLED_SetWindow(Xstart, Ystart, Xend, Yend);
+    pin_dc.Write(true);
+    
+    uint32_t dmaSize = ((Xend - Xstart + 1) / 2) * (Yend - Ystart + 1);
+    
+    SCB_CleanDCache_by_Addr((uint32_t*)Imagedata->data, dmaSize);    
+    spi_display.DmaTransmit((UBYTE*)Imagedata->data, dmaSize, NULL, OLED_Dma_Ready, NULL);
 }
