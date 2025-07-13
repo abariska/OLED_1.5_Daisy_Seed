@@ -53,7 +53,7 @@ parameter:
 void Paint_SelectImage(UBYTE *image)
 {
     Paint.Image = image;
-    Paint.Scale = 16;
+    Paint_SetScale(16);
 }
 
 /******************************************************************************

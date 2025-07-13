@@ -32,12 +32,7 @@
 #include "stdio.h"
 #include "core_cm7.h"
 
-
-
 static volatile bool dmaReady = true;
-static volatile bool updatePending = false;
-static ImageData* lastImageBuffer = NULL;
-static UBYTE pending_Xstart, pending_Ystart, pending_Xend, pending_Yend;
 
 /*******************************************************************************
 function:
