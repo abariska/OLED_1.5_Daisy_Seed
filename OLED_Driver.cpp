@@ -216,6 +216,7 @@ void OLED_Transmit_DMA(ImageData *Imagedata)
 {
     if (dmaReady)
     {
+        OLED_SetWindow(0, 0, 128, 128);
         pin_dc.Write(true);
         dmaReady = false;
         SCB_CleanDCache_by_Addr((uint32_t*)Imagedata->data, Imagedata->size);
