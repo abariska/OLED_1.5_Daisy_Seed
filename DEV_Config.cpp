@@ -36,8 +36,8 @@ void SPI_Init()
 {
     SPI_Config();
     // SSD1327 control pin config
-    pin_dc.Init(Pin(PORTB, 6), GPIO::Mode::OUTPUT);
-    pin_reset.Init(Pin(PORTB, 7), GPIO::Mode::OUTPUT);
+    pin_dc.Init(Pin(PORTC, 1), GPIO::Mode::OUTPUT);
+    pin_reset.Init(Pin(PORTB, 1), GPIO::Mode::OUTPUT);
 }
 
 
