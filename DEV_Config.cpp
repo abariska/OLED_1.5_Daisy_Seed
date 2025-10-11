@@ -26,8 +26,7 @@ void SPI_Config()
     spi_config.baud_prescaler = SpiHandle::Config::BaudPrescaler::PS_2;
     // SPI pin config
     spi_config.pin_config.sclk = Pin(PORTG, 11);
-    spi_config.pin_config.miso = Pin(PORTB, 4);
-    spi_config.pin_config.mosi = Pin(PORTB, 5);
+    spi_config.pin_config.mosi = Pin(PORTA, 7);
     spi_config.pin_config.nss  = Pin(PORTG, 10);
     spi_display.Init(spi_config);
 }
